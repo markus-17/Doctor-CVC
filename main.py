@@ -3,6 +3,9 @@ import logging
 from telegram import Update, PhotoSize, Document
 from telegram.ext import Updater, CallbackContext, MessageHandler, Filters
 
+import io
+from PIL import Image
+
 
 logging.basicConfig(
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO
@@ -12,16 +15,18 @@ logger = logging.getLogger(__name__)
 
 def image_handler(update: Update, context: CallbackContext) -> None:
     photo: PhotoSize = update.message.photo[-1]
-    # This is the url which you can later you to download the image
-    file_path: str = photo.get_file().file_path
-    update.message.reply_text('file_path')
+    bytearray: bytes = photo.get_file().download_as_bytearray()
+    im: Image = Image.open(io.BytesIO(bytearray))
+    im.show()
+    update.message.reply_text('image')
 
 
 def document_image_handler(update: Update, context: CallbackContext) -> None:
     document: Document = update.message.document
-    # This is the url which you can later use to download the image
-    document_path: str = document.get_file().file_path
-    update.message.reply_text('document_path')
+    bytearray: bytes = document.get_file().download_as_bytearray()
+    im: Image = Image.open(io.BytesIO(bytearray))
+    im.show()
+    update.message.reply_text('document')
 
 
 def default(update: Update, context: CallbackContext) -> None:

@@ -7,8 +7,12 @@ import io
 from PIL import Image
 
 
+from pneumonia import predict as pneumonia_predict
+
+
 logging.basicConfig(
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+    level=logging.INFO
 )
 logger = logging.getLogger(__name__)
 
@@ -16,17 +20,15 @@ logger = logging.getLogger(__name__)
 def image_handler(update: Update, context: CallbackContext) -> None:
     photo: PhotoSize = update.message.photo[-1]
     bytearray: bytes = photo.get_file().download_as_bytearray()
-    im: Image = Image.open(io.BytesIO(bytearray))
-    im.show()
-    update.message.reply_text('image')
+    img = Image.open(io.BytesIO(bytearray))
+    update.message.reply_text(pneumonia_predict(img))
 
 
 def document_image_handler(update: Update, context: CallbackContext) -> None:
     document: Document = update.message.document
     bytearray: bytes = document.get_file().download_as_bytearray()
-    im: Image = Image.open(io.BytesIO(bytearray))
-    im.show()
-    update.message.reply_text('document')
+    img = Image.open(io.BytesIO(bytearray))
+    update.message.reply_text(pneumonia_predict(img))
 
 
 def default(update: Update, context: CallbackContext) -> None:

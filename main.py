@@ -79,9 +79,17 @@ def default(update: Update, context: CallbackContext) -> None:
     update.message.reply_text('I don\'t really know how to respond to that. I think you should try the /help command.')
 
 
+def help(update: Update, context: CallbackContext) -> None:
+    update.message.reply_text('Welcome to Doctor CVC.')
+    update.message.reply_text('To select one of our computer vision models you have to use the /classifier command')
+    update.message.reply_text('After selecting the classifier you want to use, send a photo and you will receive an ansewr almost immediately')
+    update.message.reply_text('To change the classifier use the /classifier command again.')
+
+
 def main(token) -> None:
     updater = Updater(token)
 
+    updater.dispatcher.add_handler(CommandHandler([ 'start', 'help' ], help))
     updater.dispatcher.add_handler(CommandHandler('classifier', select_classifier_handler))
     updater.dispatcher.add_handler(CallbackQueryHandler(button))
     updater.dispatcher.add_handler(MessageHandler(Filters.photo, image_handler))

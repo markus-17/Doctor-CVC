@@ -9,10 +9,12 @@ from PIL import Image
 
 from pneumonia import predict as pneumonia_predict
 from brain import predict as brain_predict
+from skin import predict as skin_predict
 
 predict = {
     'pneumonia': pneumonia_predict,
-    'brain': brain_predict
+    'brain': brain_predict,
+    'skin': skin_predict
 }
 
 
@@ -26,7 +28,8 @@ logger = logging.getLogger(__name__)
 def select_classifier_handler(update: Update, context: CallbackContext) -> None:
     keyboard = [
         [ InlineKeyboardButton('Pneumonia Classifier', callback_data='pneumonia') ],
-        [ InlineKeyboardButton('Brain Tumor Classifier', callback_data='brain') ]
+        [ InlineKeyboardButton('Brain Tumor Classifier', callback_data='brain') ],
+        [ InlineKeyboardButton('Skin Cancer Classifier', callback_data='skin') ]
     ]
 
     reply_markup = InlineKeyboardMarkup(keyboard)
